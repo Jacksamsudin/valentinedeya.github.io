@@ -8,7 +8,6 @@
 <style>
 body {
     margin: 0;
-    padding: 0;
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -36,17 +35,25 @@ body {
     margin-bottom: 15px;
 }
 
+/* Animated Text */
 h1 {
     font-size: 22px;
     color: #ff4d6d;
     margin-bottom: 20px;
+    animation: fadeIn 2s ease forwards;
 }
 
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(-20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Buttons */
 button {
-    padding: 10px 20px;
+    padding: 12px 25px;
     margin: 10px;
     border: none;
-    border-radius: 20px;
+    border-radius: 25px;
     font-size: 16px;
     cursor: pointer;
     transition: 0.3s;
@@ -63,11 +70,9 @@ button {
 
 #no {
     background-color: #ccc;
-    position: relative; /* bukan absolute lagi */
 }
 
-
-/* Falling hearts */
+/* Falling Hearts */
 .heart {
     position: absolute;
     color: #ff4d6d;
@@ -84,45 +89,53 @@ button {
 
 <body>
 
+<!-- Background Music (Glue Song - instrumental YouTube autoplay) -->
+<iframe width="0" height="0" 
+src="https://www.youtube.com/embed/0bC2lH3N0l8?autoplay=1&loop=1&playlist=0bC2lH3N0l8" 
+frameborder="0" allow="autoplay">
+</iframe>
+
 <div class="card">
-    <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" alt="Cute Cat">
+    <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif">
     <h1>Deya Indriyani, Will you be my valentine? 💖</h1>
     <button id="yes" onclick="yesClicked()">Yes 💕</button>
-    <button id="no" ontouchstart="moveButton()" onmouseover="moveButton()">No 😜</button>
+    <button id="no" onclick="shrinkNo()">No 😜</button>
 </div>
 
 <script>
+let noSize = 1;
+let clickCount = 0;
+
+function shrinkNo() {
+    let noBtn = document.getElementById("no");
+    clickCount++;
+
+    noSize -= 0.2;
+    if (noSize <= 0.5) {
+        noBtn.innerText = "are u sure?";
+    }
+
+    if (noSize <= 0.3) {
+        noSize = 0.3;
+    }
+
+    noBtn.style.transform = "scale(" + noSize + ")";
+}
+
 function yesClicked() {
     document.body.innerHTML = `
     <div style="display:flex;justify-content:center;align-items:center;height:100vh;
     background:linear-gradient(135deg,#ff758c,#ff7eb3);
     font-family:Poppins,sans-serif;text-align:center;color:white;">
-        <div>
-            <img src="https://media.tenor.com/hCnHNfm23rgAAAAj/suho-cat.gif" width="200"><br>
-            <h1>YEAYYY I LOVE YOU DEYAAA 💕🥰</h1>
-            <h2>You made me the happiest person alive 💖</h2>
+        <div style="animation:fadeIn 2s ease;">
+            <img src="https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif" width="200"><br>
+            <h1>YAYAYAYAYYAYA, I LOVE YOUU DEYAA 💕🥰</h1>
+            <h2>You are stuck with me now 😎💖</h2>
         </div>
     </div>`;
 }
 
-function moveButton() {
-    let button = document.getElementById("no");
-    let card = document.querySelector(".card");
-
-    let cardRect = card.getBoundingClientRect();
-    let maxX = card.offsetWidth - button.offsetWidth - 20;
-    let maxY = card.offsetHeight - button.offsetHeight - 20;
-
-    let x = Math.random() * maxX;
-    let y = Math.random() * maxY;
-
-    button.style.position = "absolute";
-    button.style.left = x + "px";
-    button.style.top = y + "px";
-}
-
-
-/* Create falling hearts */
+/* Falling hearts */
 function createHeart() {
     const heart = document.createElement("div");
     heart.classList.add("heart");
@@ -136,7 +149,7 @@ function createHeart() {
     }, 5000);
 }
 
-setInterval(createHeart, 300);
+setInterval(createHeart, 400);
 </script>
 
 </body>
