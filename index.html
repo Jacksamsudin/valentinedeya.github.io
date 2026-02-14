@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,38 +17,22 @@ body {
     overflow: hidden;
 }
 
-/* Card */
-.card {
-    background: white;
+.screen {
+    text-align: center;
     width: 90%;
     max-width: 350px;
+    background: white;
     padding: 25px;
     border-radius: 25px;
-    text-align: center;
     box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-    position: relative;
-    z-index: 2;
+    animation: fadeIn 1.5s ease;
 }
 
-.card img {
-    width: 150px;
-    margin-bottom: 15px;
-}
-
-/* Animated Text */
 h1 {
     font-size: 22px;
     color: #ff4d6d;
-    margin-bottom: 20px;
-    animation: fadeIn 2s ease forwards;
 }
 
-@keyframes fadeIn {
-    0% { opacity: 0; transform: translateY(-20px); }
-    100% { opacity: 1; transform: translateY(0); }
-}
-
-/* Buttons */
 button {
     padding: 12px 25px;
     margin: 10px;
@@ -59,8 +43,8 @@ button {
     transition: 0.3s;
 }
 
-#yes {
-    background-color: #ff4d6d;
+.start-btn, #yes {
+    background: #ff4d6d;
     color: white;
 }
 
@@ -72,7 +56,12 @@ button {
     background-color: #ccc;
 }
 
-/* Falling Hearts */
+@keyframes fadeIn {
+    from {opacity: 0; transform: translateY(-20px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+
+/* Hearts */
 .heart {
     position: absolute;
     color: #ff4d6d;
@@ -89,29 +78,59 @@ button {
 
 <body>
 
-<!-- Background Music (Glue Song - instrumental YouTube autoplay) -->
-<iframe width="0" height="0" 
-src="https://www.youtube.com/embed/0bC2lH3N0l8?autoplay=1&loop=1&playlist=0bC2lH3N0l8" 
-frameborder="0" allow="autoplay">
-</iframe>
-
-<div class="card">
-    <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif">
-    <h1>Deya Indriyani, Will you be my valentine? 💖</h1>
-    <button id="yes" onclick="yesClicked()">Yes 💕</button>
-    <button id="no" onclick="shrinkNo()">No 😜</button>
+<div class="screen" id="startScreen">
+    <h1>Hi you 💕</h1>
+    <p>I have something for you...</p>
+    <button class="start-btn" onclick="startApp()">Start 💖</button>
 </div>
 
 <script>
 let noSize = 1;
-let clickCount = 0;
+let player;
+
+/* Load YouTube API */
+let tag = document.createElement('script');
+tag.src = "https://www.youtube.com/iframe_api";
+document.body.appendChild(tag);
+
+function onYouTubeIframeAPIReady() {
+    player = new YT.Player('hiddenPlayer', {
+        height: '0',
+        width: '0',
+        videoId: 'y1cBhJLNNXU', // <--- pakai video ID kamu
+        playerVars: {
+            autoplay: 0,
+            loop: 1,
+            playlist: 'y1cBhJLNNXU'
+        }
+    });
+}
+
+function startApp() {
+    if (player && player.playVideo) {
+        player.playVideo();
+    }
+
+    document.body.innerHTML += `
+    <div id="hiddenPlayer"></div>
+
+    <div class="screen">
+        <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" width="150"><br>
+        <h1>Will you be my valentine? 💖</h1>
+        <button id="yes" onclick="yesClicked()">Yes 💕</button>
+        <button id="no" onclick="shrinkNo()">No 😜</button>
+    </div>
+    `;
+
+    document.getElementById("startScreen").remove();
+    setInterval(createHeart, 400);
+}
 
 function shrinkNo() {
     let noBtn = document.getElementById("no");
-    clickCount++;
-
     noSize -= 0.2;
-    if (noSize <= 0.5) {
+
+    if (noSize <= 0.6) {
         noBtn.innerText = "are u sure?";
     }
 
@@ -126,16 +145,15 @@ function yesClicked() {
     document.body.innerHTML = `
     <div style="display:flex;justify-content:center;align-items:center;height:100vh;
     background:linear-gradient(135deg,#ff758c,#ff7eb3);
-    font-family:Poppins,sans-serif;text-align:center;color:white;">
-        <div style="animation:fadeIn 2s ease;">
+    text-align:center;color:white;font-family:Poppins;">
+        <div>
             <img src="https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif" width="200"><br>
-            <h1>YAYAYAYAYYAYA, I LOVE YOUU DEYAA 💕🥰</h1>
-            <h2>You are stuck with me now 😎💖</h2>
+            <h1>YAYYYY 💕🥰</h1>
+            <h2>You are mine now 😎💖</h2>
         </div>
     </div>`;
 }
 
-/* Falling hearts */
 function createHeart() {
     const heart = document.createElement("div");
     heart.classList.add("heart");
@@ -148,8 +166,6 @@ function createHeart() {
         heart.remove();
     }, 5000);
 }
-
-setInterval(createHeart, 400);
 </script>
 
 </body>
