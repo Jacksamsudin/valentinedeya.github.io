@@ -63,8 +63,9 @@ button {
 
 #no {
     background-color: #ccc;
-    position: absolute;
+    position: relative; /* bukan absolute lagi */
 }
+
 
 /* Falling hearts */
 .heart {
@@ -85,7 +86,7 @@ button {
 
 <div class="card">
     <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" alt="Cute Cat">
-    <h1>Will you be my valentine? 💖</h1>
+    <h1>Deya Indriyani, Will you be my valentine? 💖</h1>
     <button id="yes" onclick="yesClicked()">Yes 💕</button>
     <button id="no" ontouchstart="moveButton()" onmouseover="moveButton()">No 😜</button>
 </div>
@@ -97,8 +98,8 @@ function yesClicked() {
     background:linear-gradient(135deg,#ff758c,#ff7eb3);
     font-family:Poppins,sans-serif;text-align:center;color:white;">
         <div>
-            <img src="https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif" width="200"><br>
-            <h1>YAYYYY 💕🥰</h1>
+            <img src="https://media.tenor.com/hCnHNfm23rgAAAAj/suho-cat.gif" width="200"><br>
+            <h1>YEAYYY I LOVE YOU DEYAAA 💕🥰</h1>
             <h2>You made me the happiest person alive 💖</h2>
         </div>
     </div>`;
@@ -106,11 +107,20 @@ function yesClicked() {
 
 function moveButton() {
     let button = document.getElementById("no");
-    let x = Math.random() * (window.innerWidth - 100);
-    let y = Math.random() * (window.innerHeight - 50);
+    let card = document.querySelector(".card");
+
+    let cardRect = card.getBoundingClientRect();
+    let maxX = card.offsetWidth - button.offsetWidth - 20;
+    let maxY = card.offsetHeight - button.offsetHeight - 20;
+
+    let x = Math.random() * maxX;
+    let y = Math.random() * maxY;
+
+    button.style.position = "absolute";
     button.style.left = x + "px";
     button.style.top = y + "px";
 }
+
 
 /* Create falling hearts */
 function createHeart() {
